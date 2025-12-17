@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+numpy
+sentence-transformers
+redis
+python-dotenv
+requests
+pytest
+httpx
+cyborgdb
