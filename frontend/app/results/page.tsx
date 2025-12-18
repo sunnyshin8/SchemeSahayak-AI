@@ -5,7 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import { searchSchemes } from '../utils/api';
 import Link from 'next/link';
 import { useLanguage } from '../context/LanguageContext';
-import LanguageSwitch from '../components/LanguageSwitch';
 
 function ResultsContent() {
     const searchParams = useSearchParams();
@@ -26,15 +25,14 @@ function ResultsContent() {
 
     return (
         <div className="min-h-screen bg-gray-900 text-white p-6">
-            <LanguageSwitch />
-            <header className="max-w-6xl mx-auto flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
+            <header className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-800 pb-4 gap-4">
                 <Link href="/">
-                    <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 cursor-pointer">
+                    <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400 cursor-pointer text-center md:text-left">
                         {t.title}
                     </h1>
                 </Link>
-                <div className="bg-gray-800 px-4 py-2 rounded-full text-sm text-gray-400">
-                    Query: <span className="text-white italic">"{query}"</span>
+                <div className="bg-gray-800 px-4 py-2 rounded-full text-sm text-gray-400 w-full md:w-auto text-center truncate max-w-full">
+                    Query: <span className="text-white italic truncate">"{query}"</span>
                 </div>
             </header>
 
@@ -55,7 +53,7 @@ function ResultsContent() {
 
                                 return (
                                     <div key={idx} className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-cyan-500 transition duration-300 shadow-lg flex flex-col justify-between">
-                                        <div className="flex justify-between items-start">
+                                        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                                             <div className="flex-1">
                                                 <Link href={detailsUrl} className="hover:underline">
                                                     <h3 className="text-xl font-bold text-cyan-300 mb-2 flex items-center gap-2">
@@ -80,7 +78,7 @@ function ResultsContent() {
                                                     )}
                                                 </div>
                                             </div>
-                                            <div className="text-right ml-4 min-w-[80px]">
+                                            <div className="text-left sm:text-right min-w-[80px]">
                                                 <div className="text-sm text-gray-400">{t.relevance}</div>
                                                 <div className="text-2xl font-bold text-green-400">{(item.score * 100).toFixed(0)}%</div>
                                             </div>
@@ -89,7 +87,7 @@ function ResultsContent() {
                                         <div className="mt-4 pt-4 border-t border-gray-700 flex justify-end">
                                             <Link
                                                 href={detailsUrl}
-                                                className="text-cyan-400 hover:text-cyan-300 font-semibold text-sm flex items-center gap-1 transition-colors"
+                                                className="text-cyan-400 hover:text-cyan-300 font-semibold text-sm flex items-center gap-1 transition-colors flex-wrap justify-end"
                                             >
                                                 View Full Details & AI Chat →
                                             </Link>

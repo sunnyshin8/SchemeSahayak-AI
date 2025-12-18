@@ -58,9 +58,9 @@ export default function FeaturesPage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black text-white">
-            <div className="max-w-7xl mx-auto px-4 py-16">
-                <div className="text-center mb-16">
-                    <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">
+            <div className="max-w-7xl mx-auto px-4 py-12 md:py-16">
+                <div className="text-center mb-12 md:mb-16">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">
                         Platform Features
                     </h1>
                     <p className="text-xl text-gray-300 max-w-3xl mx-auto">

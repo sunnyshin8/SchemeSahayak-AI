@@ -3,11 +3,11 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { translations } from '../utils/translations';
 
-type Language = 'en' | 'hi';
+type Language = 'en' | 'hi' | 'gu' | 'ur' | 'ta' | 'kn';
 
 interface LanguageContextType {
     lang: Language;
-    toggleLanguage: () => void;
+    setLanguage: (lang: Language) => void;
     t: typeof translations['en'];
 }
 
@@ -16,14 +16,14 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
     const [lang, setLang] = useState<Language>('en');
 
-    const toggleLanguage = () => {
-        setLang((prev) => (prev === 'en' ? 'hi' : 'en'));
+    const setLanguage = (newLang: Language) => {
+        setLang(newLang);
     };
 
     const t = translations[lang];
 
     return (
-        <LanguageContext.Provider value={{ lang, toggleLanguage, t }}>
+        <LanguageContext.Provider value={{ lang, setLanguage, t }}>
             {children}
         </LanguageContext.Provider>
     );

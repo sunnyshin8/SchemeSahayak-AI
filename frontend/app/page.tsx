@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from './context/LanguageContext';
-import LanguageSwitch from './components/LanguageSwitch';
 
 export default function Home() {
   const [query, setQuery] = useState('');
@@ -18,10 +17,9 @@ export default function Home() {
   };
 
   return (
-    <div className="flex-grow bg-gradient-to-br from-indigo-900 via-purple-900 to-black text-white flex flex-col items-center justify-center p-4 py-16 w-full">
-      <LanguageSwitch />
+    <div className="flex-grow bg-gradient-to-br from-indigo-900 via-purple-900 to-black text-white flex flex-col items-center justify-center p-4 py-12 md:py-16 w-full">
       <main className="w-full max-w-3xl text-center space-y-8">
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">
+        <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">
           {t.title}
         </h1>
         <p className="text-xl md:text-2xl text-gray-300 font-light">
