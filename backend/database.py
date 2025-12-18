@@ -86,7 +86,8 @@ class MockEncryptedIndex:
 cyborg_client = None
 
 try:
-    use_mock = os.getenv("USE_MOCK_DB", "false").lower() == "true"
+    # FORCE MOCK due to critical urllib3/cyborgdb dependency conflict in current environment
+    use_mock = True # os.getenv("USE_MOCK_DB", "false").lower() == "true"
     
     if CYBORGDB_API_KEY and not use_mock:
         try:
@@ -96,11 +97,8 @@ try:
             cyborg_client = Client("https://api.cyborgdb.co", CYBORGDB_API_KEY) 
             print("Successfully connected to CyborgDB Cloud.")
             print(f"Using API Key: {CYBORGDB_API_KEY[:5]}...{CYBORGDB_API_KEY[-5:]}")
-        except ImportError:
-            print("CyborgDB package not found (ImportError). Using Mock Client.")
-            cyborg_client = MockCyborgClient()
         except Exception as e:
-            print(f"Failed to connect to CyborgDB Cloud: {e}. Falling back to Mock Client.")
+            print(f"CRITICAL: Failed to connect to CyborgDB Cloud ({type(e).__name__}: {e}). Falling back to Mock Client.")
             cyborg_client = MockCyborgClient()
     else:
         if use_mock:

@@ -43,6 +43,7 @@ class CyborgService:
         # Initialize indexes with keys
         self.scheme_index = self._init_index("schemes")
         self.citizen_index = self._init_index("citizens")
+        self.user_index = self._init_index("users")
 
     def _init_index(self, name: str):
         key = get_or_create_key(name, self.client)
@@ -61,6 +62,29 @@ class CyborgService:
             if hasattr(self.client, 'create_index'):
                  return self.client.create_index(name, key)
             return self.client.get_index(name)
+
+    def register_user(self, user_id: str, email: str, password_hash: str, name: str):
+        # We need a vector, so we embed the name/email, though we won't use it for auth search
+        text_to_embed = f"{name} {email}"
+        vector = self.embedder.encode(text_to_embed)
+        
+        item = {
+            "id": email, # Use email as ID for easy lookup
+            "vector": vector,
+            "metadata": {
+                "name": name,
+                "email": email,
+                "password_hash": password_hash,
+                "role": "user"
+            }
+        }
+        return self.user_index.upsert([item])
+
+    def get_user(self, email: str):
+        # Retrieve user by email (ID)
+        if hasattr(self.user_index, 'get_by_id'):
+            return self.user_index.get_by_id(email)
+        return None
 
     def index_scheme(self, scheme_id: str, title: str, description: str, metadata: dict):
         text_to_embed = f"{title}. {description}"

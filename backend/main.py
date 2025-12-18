@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import citizen, agency
+from routes import citizen, agency, auth
 import uvicorn
 
 app = FastAPI(title="SchemeSahayak API", description="AI-Powered Government Scheme Intelligence Platform")
@@ -15,6 +15,7 @@ app.add_middleware(
 
 app.include_router(citizen.router, prefix="/api/citizen", tags=["Citizen"])
 app.include_router(agency.router, prefix="/api/agency", tags=["Agency"])
+app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 
 @app.get("/")
 def read_root():
