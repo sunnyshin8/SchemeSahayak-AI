@@ -17,18 +17,23 @@ def get_or_create_key(index_name: str, client):
     if index_name in keys:
         # Convert hex string back to bytes
         key_str = keys[index_name]
-        return bytes.fromhex(key_str) if isinstance(key_str, str) and not key_str.startswith("mock-") else key_str
+        try:
+             return bytes.fromhex(key_str)
+        except ValueError:
+             # If it was a legacy string key (unlikely in this context but safe to handle), regenerate
+             pass
     
     # Generate new key
     if hasattr(client, 'generate_key'):
         # Real Client - returns bytes
         new_key = client.generate_key()
-        # Convert bytes to hex string for JSON storage
-        key_to_store = new_key.hex()
     else:
         # Mock Client fallback
-        new_key = f"mock-key-{index_name}-12345"
-        key_to_store = new_key
+        # Generate a valid 32-byte key
+        new_key = os.urandom(32)
+        
+    # Convert bytes to hex string for JSON storage
+    key_to_store = new_key.hex()
         
     keys[index_name] = key_to_store
     with open(KEYS_FILE, 'w') as f:

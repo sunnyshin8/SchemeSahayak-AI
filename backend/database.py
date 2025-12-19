@@ -111,7 +111,7 @@ cyborg_client = None
 
 try:
     # Try real connection first
-    use_mock = False # os.getenv("USE_MOCK_DB", "false").lower() == "true"
+    use_mock = True # os.getenv("USE_MOCK_DB", "false").lower() == "true"
     
     if CYBORGDB_API_KEY and not use_mock:
         try:
