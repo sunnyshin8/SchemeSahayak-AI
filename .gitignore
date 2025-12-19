@@ -60,3 +60,6 @@ backend/connection.log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Scripts
+backend/generate_mock_citizens.py

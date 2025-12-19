@@ -46,7 +46,26 @@ class MockCyborgClient:
 class MockEncryptedIndex:
     def __init__(self, name):
         self.name = name
-        self.data = [] # List of {'id': str, 'vector': list, 'metadata': dict}
+        self.filename = f"mock_index_{name}.json"
+        self.data = self._load() # List of {'id': str, 'vector': list, 'metadata': dict}
+
+    def _load(self):
+        import json
+        if os.path.exists(self.filename):
+            try:
+                with open(self.filename, 'r') as f:
+                    return json.load(f)
+            except Exception as e:
+                print(f"Mock: Error loading {self.filename}: {e}")
+        return []
+
+    def _save(self):
+        import json
+        try:
+            with open(self.filename, 'w') as f:
+                json.dump(self.data, f)
+        except Exception as e:
+            print(f"Mock: Error saving {self.filename}: {e}")
 
     def upsert(self, items):
         # items: list of dicts with id, vector, metadata
@@ -55,6 +74,7 @@ class MockEncryptedIndex:
             # Simple overwrite logic
             self.data = [d for d in self.data if d['id'] != item['id']]
             self.data.append(item)
+        self._save() # Persist
         return True
 
     def query(self, vector, top_k=5):
@@ -69,7 +89,11 @@ class MockEncryptedIndex:
         for doc in self.data:
             doc_vec = np.array(doc['vector'])
             # Cosine sim
-            score = np.dot(query_vec, doc_vec) / (np.linalg.norm(query_vec) * np.linalg.norm(doc_vec))
+            denom = (np.linalg.norm(query_vec) * np.linalg.norm(doc_vec))
+            if denom == 0:
+                score = 0
+            else:
+                score = np.dot(query_vec, doc_vec) / denom
             results.append({**doc, 'score': float(score)})
         
         results.sort(key=lambda x: x['score'], reverse=True)
@@ -86,8 +110,8 @@ class MockEncryptedIndex:
 cyborg_client = None
 
 try:
-    # FORCE MOCK due to critical urllib3/cyborgdb dependency conflict in current environment
-    use_mock = True # os.getenv("USE_MOCK_DB", "false").lower() == "true"
+    # Try real connection first
+    use_mock = False # os.getenv("USE_MOCK_DB", "false").lower() == "true"
     
     if CYBORGDB_API_KEY and not use_mock:
         try:

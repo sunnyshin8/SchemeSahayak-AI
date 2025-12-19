@@ -8,3 +8,7 @@ requests
 pytest
 httpx
 cyborgdb
+pandas
+openpyxl
+Faker
+urllib3<2.0.0
